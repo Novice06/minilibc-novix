@@ -11,6 +11,9 @@ typedef struct {
     int _err;
 } FILE;
 
+#define SEEK_SET 1 << 0
+#define SEEK_CUR 1 << 1
+#define SEEK_END 1 << 2
 
 #define _FILE_READ  0x01
 #define _FILE_WRITE 0x02
@@ -18,6 +21,10 @@ typedef struct {
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
+
+int remove(char *filename);
+int rename(const char *oldpath, const char *newpath);
+int sscanf(const char *str, const char *format, ...);
 
 void perror(const char *s);
 
@@ -33,6 +40,9 @@ int feof(FILE *f);
 int ferror(FILE *f);
 int fprintf(FILE *f, const char *fmt, ...);
 int vfprintf(FILE *f, const char *fmt, va_list ap);
+long ftell(FILE *stream);
+int fseek(FILE *stream, long offset, int whence);
+int fflush(FILE *stream);
 
 int puts(const char *s);
 int putchar(int c);

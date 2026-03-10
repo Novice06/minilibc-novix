@@ -11,9 +11,12 @@ void free (void *ptr);
 void exit(int status) __attribute__((noreturn));
 void abort(void)       __attribute__((noreturn));
 
+double atof(const char *nptr);
 int atoi(const char *s);
 long atol(const char *s);
 long strtol(const char *s, char **end, int base);
+
+int system(char *command);
 
 int  abs(int x);
 long labs(long x);

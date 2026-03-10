@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <errno.h>
+#include <ctype.h>
 #include "_syscall.h"
 
 // bump allocator via brk
@@ -41,6 +43,13 @@ void exit(int status) { _exit(status); __builtin_unreachable(); }
 
 void abort(void) { _exit(1); }
 
+int system(char *command) {
+    /*Novix doesnt have this !*/
+    char* argv[] = {"shell", "-c", command, NULL};
+    execve("/usr/bin/shell", argv , NULL);
+    return 0;
+}
+
 long strtol(const char *s, char **end, int base) {
     while (*s == ' ') s++;
     int neg = (*s == '-'); if (neg || *s == '+') s++;
@@ -61,6 +70,71 @@ long strtol(const char *s, char **end, int base) {
     }
     if (end) *end = (char *)s;
     return neg ? -v : v;
+}
+
+double atof(const char *s) {
+    double value = 0.0;
+    double frac_scale = 1.0;
+    int sign = 1;
+    int exp_sign = 1;
+    int exp = 0;
+
+    if (!s) {
+        return 0.0;
+    }
+
+    while (isspace((unsigned char)*s)) {
+        s++;
+    }
+
+    if (*s == '-') {
+        sign = -1;
+        s++;
+    } else if (*s == '+') {
+        s++;
+    }
+
+    while (isdigit((unsigned char)*s)) {
+        value = value * 10.0 + (double)(*s - '0');
+        s++;
+    }
+
+    if (*s == '.') {
+        s++;
+        while (isdigit((unsigned char)*s)) {
+            value = value * 10.0 + (double)(*s - '0');
+            frac_scale *= 10.0;
+            s++;
+        }
+    }
+
+    value /= frac_scale;
+
+    if (*s == 'e' || *s == 'E') {
+        s++;
+        if (*s == '-') {
+            exp_sign = -1;
+            s++;
+        } else if (*s == '+') {
+            s++;
+        }
+
+        while (isdigit((unsigned char)*s)) {
+            exp = exp * 10 + (*s - '0');
+            s++;
+        }
+    }
+
+    while (exp > 0) {
+        if (exp_sign > 0) {
+            value *= 10.0;
+        } else {
+            value /= 10.0;
+        }
+        exp--;
+    }
+
+    return (double)sign * value;
 }
 
 

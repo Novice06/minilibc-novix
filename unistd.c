@@ -15,6 +15,10 @@ pid_t getpid(void) {
     return (pid_t)__sys_getpid();
 }
 
+off_t lseek(int fd, size_t offset, int whence) {
+    return 0; //__syscall3(15, fd, offset, whence); // implement
+}
+
 pid_t fork(void) {
     // return (pid_t)_sc1(_SCAL_FORK, 0);
 }
@@ -31,10 +35,6 @@ int execve(const char *path, char *const argv[], char *const envp[]) {
 
 int chdir(const char *path) {
     // return (int)_sc1(_SCAL_CHDIR, (long)path);
-}
-
-int mkdir(const char *path) {
-    // return (int)_sc1(_SCAL_MKDIR, (long)path);
 }
 
 int unlink(const char *path) {

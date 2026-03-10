@@ -14,6 +14,15 @@ FILE *stdin  = &_stdin;
 FILE *stdout = &_stdout;
 FILE *stderr = &_stderr;
 
+int remove(char *filename) {
+    return 0; // __syscall1(13, (size_t) filename);    // implement this
+}
+
+int rename(const char *oldpath, const char *newpath) {
+    printf("TODO: rename() in libc\n");
+    return 0;
+}
+
 FILE *fopen(const char *path, const char *mode)
 {
     if (!path || !mode) { errno = EINVAL; return NULL; }
@@ -154,6 +163,25 @@ int fprintf(FILE *f, const char *fmt, ...)
     int r = vfprintf(f, fmt, ap);
     va_end(ap);
     return r;
+}
+
+int fseek(FILE *stream, long offset, int whence) {
+    lseek(stream->_fd, offset, whence);
+    return 0;
+}
+
+long ftell(FILE *stream) {
+    return lseek(stream->_fd, 0, SEEK_CUR);
+}
+
+int fflush(FILE *stream) {
+    // nothing to do gng it's not buffered
+    return 0;
+}
+
+int sscanf(const char *str, const char *format, ...) {
+    printf("TODO: sscanf is not implemented yet\n");
+    exit(1);
 }
 
 static int _uitoa(unsigned long v, int base, char *out)
