@@ -4,10 +4,10 @@
 #include <errno.h>
 #include "_syscall.h"
 
-// entry written by scall_getdents (matches _emx_kdirent_t)
+// entry written by __sys_getdents
 typedef struct {
-    unsigned char _type;
-    char _name[64];
+    uint8_t _type; // file / dir
+    char _name[256];
 } _kdirent_t;
 
 // max entries per directory read
@@ -37,7 +37,7 @@ DIR *opendir(const char *path)
     // free automatically when opendir returns
     _kdirent_t raw[_KDIRENT_MAX];
 
-    long n = 0; //_sc3(_SCAL_GETDENTS, (long)path, (long)raw, (long)_KDIRENT_MAX); // my future syscall
+    long n = __sys_getdents(path, raw, _KDIRENT_MAX);
     if (n < 0) { errno = ENOENT; return NULL; }
 
     // only allocate heap for the actual entries we got back

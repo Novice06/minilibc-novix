@@ -15,6 +15,7 @@ FILE *stdout = &_stdout;
 FILE *stderr = &_stderr;
 
 int remove(char *filename) {
+    printf("TODO: remove() in libc\n");
     return 0; // __syscall1(13, (size_t) filename);    // implement this
 }
 

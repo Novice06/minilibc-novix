@@ -16,7 +16,7 @@ pid_t getpid(void) {
 }
 
 off_t lseek(int fd, size_t offset, int whence) {
-    return 0; //__syscall3(15, fd, offset, whence); // implement
+    return __sys_seek(fd, offset, whence);
 }
 
 pid_t fork(void) {
@@ -38,7 +38,7 @@ int chdir(const char *path) {
 }
 
 int unlink(const char *path) {
-    // return (int)_sc1(_SCAL_UNLINK, (long)path);
+    return (int)__sys_unlink(path);
 }
 
 char *getcwd(char *buf, size_t size) {

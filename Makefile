@@ -24,9 +24,6 @@ $(BLD)/_syscall.o: _syscall.asm | $(BLD)
 $(BLD):
 	mkdir -p $@
 
-test: all
-	$(MAKE) -C usr/
-
 clean:
 	rm -rf $(BLD)
 
